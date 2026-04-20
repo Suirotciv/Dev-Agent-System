@@ -1,0 +1,38 @@
+# Python
+__pycache__/
+*.py[cod]
+*$py.class
+.Python
+*.so
+.venv/
+venv/
+ENV/
+env/
+
+# Local secrets (never commit)
+.env
+.env.*
+!.env.example
+
+# Per-machine setup log from bootstrap
+.agents/SETUP_LOG.md
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Editors / IDEs
+.idea/
+*.swp
+*.swo
+
+# Tooling
+.mypy_cache/
+.pytest_cache/
+.ruff_cache/
+coverage.xml
+htmlcov/
+
+# Temp / scratch
+*.tmp
+*.log

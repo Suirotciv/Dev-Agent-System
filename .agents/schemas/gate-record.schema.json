@@ -1,0 +1,102 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "Gate Artifact",
+  "type": "object",
+  "required": [
+    "gate_attempt_id",
+    "feature",
+    "gate",
+    "date",
+    "result",
+    "verified_by",
+    "_prompt_version",
+    "functional_subpasses",
+    "criteria_results",
+    "known_issue_ids",
+    "failures"
+  ],
+  "properties": {
+    "gate_attempt_id": { "type": "string" },
+    "feature": { "type": "string" },
+    "gate": { "type": "string" },
+    "date": { "type": "string" },
+    "result": { "type": "string", "enum": ["PASS", "FAIL"] },
+    "verified_by": { "type": "string" },
+    "_prompt_version": {
+      "type": "string",
+      "pattern": "^[0-9a-f]{12}$"
+    },
+    "functional_subpasses": {
+      "type": "object",
+      "required": ["static", "behavioral"],
+      "properties": {
+        "static": {
+          "type": "string",
+          "enum": ["PASS", "FAIL", "SKIPPED"]
+        },
+        "behavioral": {
+          "type": "string",
+          "enum": ["PASS", "FAIL", "NOT_RUN", "SKIPPED"]
+        }
+      }
+    },
+    "criteria_results": {
+      "type": "object",
+      "minProperties": 1,
+      "additionalProperties": {
+        "type": "object",
+        "required": ["status", "evidence"],
+        "properties": {
+          "status": {
+            "type": "string",
+            "enum": ["PASS", "FAIL", "DEFERRED", "N/A"]
+          },
+          "evidence": {
+            "type": "string",
+            "minLength": 1,
+            "description": "Specific evidence: test name, command output, or observed behavior. Not vague."
+          }
+        }
+      }
+    },
+    "known_issue_ids": {
+      "type": "array",
+      "items": { "type": "string" }
+    },
+    "failures": {
+      "type": "array",
+      "items": { "type": "object" }
+    },
+    "verifier_context": {
+      "type": "object",
+      "description": "Records exactly what the Verifier had access to. Required for auditing independence.",
+      "required": [
+        "spec_read",
+        "implementation_session_logs_read",
+        "feature_notes_in_state_read"
+      ],
+      "properties": {
+        "spec_read": {
+          "type": "boolean",
+          "description": "True if SPEC.md was read before verification."
+        },
+        "implementation_session_logs_read": {
+          "type": "boolean",
+          "description": "Should be false. If true, independence is compromised - document why."
+        },
+        "feature_notes_in_state_read": {
+          "type": "boolean",
+          "description": "Should be false. If true, document why in additional_context."
+        },
+        "additional_context": {
+          "type": "string",
+          "description": "Any additional context sources the Verifier used. Empty string if none."
+        }
+      }
+    },
+    "override_reason": {
+      "type": "string",
+      "description": "If a human operator overrode a FAIL to PASS, document the reason here."
+    }
+  }
+}

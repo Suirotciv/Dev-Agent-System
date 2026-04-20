@@ -1,0 +1,85 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "Agent Update Envelope",
+  "description": "Non-orchestrator agents submit these to .agents/updates/ instead of patching STATE.json directly. The Orchestrator merges them via merge-updates.py. Conflict policy: when two envelopes set the same dotted path, the one with the later submitted_at timestamp wins. Conflicts are recorded in STATE.json._conflicts for review.",
+  "type": "object",
+  "required": [
+    "update_id",
+    "submitted_at",
+    "submitted_by",
+    "role",
+    "_prompt_version",
+    "_state_revision_at_start",
+    "target_feature",
+    "resource_claim_id",
+    "summary",
+    "changes"
+  ],
+  "properties": {
+    "update_id": {
+      "type": "string",
+      "description": "Unique ID for this envelope. Format: UPD-YYYYMMDD-HHMMSS-role[-feature]-NN. Used for idempotency - re-submitting an already-merged envelope is rejected."
+    },
+    "submitted_at": {
+      "type": "string",
+      "description": "ISO 8601 timestamp. Used for conflict resolution: later submitted_at wins when two envelopes set the same path."
+    },
+    "submitted_by": { "type": "string" },
+    "role": {
+      "type": "string",
+      "enum": [
+        "orchestrator",
+        "feature-agent",
+        "verifier-agent",
+        "infra-agent",
+        "design-system-agent"
+      ]
+    },
+    "_prompt_version": {
+      "type": "string",
+      "pattern": "^[0-9a-f]{12}$",
+      "description": "Hash of the prompt file in use when this envelope was created. From STATE.json prompt_versions."
+    },
+    "_state_revision_at_start": {
+      "type": "integer",
+      "minimum": 0,
+      "description": "The _state_revision value when the agent read STATE.json. Merge script warns if this is stale."
+    },
+    "target_feature": {
+      "type": ["string", "null"],
+      "description": "The feature this envelope is primarily about. Null for orchestrator-level changes."
+    },
+    "resource_claim_id": {
+      "type": ["string", "null"],
+      "description": "The resource claim ID of the agent session submitting this envelope."
+    },
+    "summary": {
+      "type": "string",
+      "minLength": 10,
+      "description": "Human-readable summary of what this envelope changes and why."
+    },
+    "changes": {
+      "type": "array",
+      "minItems": 1,
+      "description": "Ordered list of changes to apply to STATE.json.",
+      "items": {
+        "type": "object",
+        "required": ["op", "path"],
+        "properties": {
+          "op": {
+            "type": "string",
+            "enum": ["set", "append"],
+            "description": "set: assign a value at a dotted path (overwrites). append: append to a list at a dotted path."
+          },
+          "path": {
+            "type": "string",
+            "description": "Dotted path into STATE.json (e.g. features.user-auth.status)."
+          },
+          "value": {
+            "description": "The value to set or append. Required for both ops."
+          }
+        }
+      }
+    }
+  }
+}

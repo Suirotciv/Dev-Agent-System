@@ -1,0 +1,38 @@
+#!/bin/bash
+# pre-commit-hook
+# Validates agent-system artifacts before every commit.
+# Install via: bash .agents/scripts/install-hooks.sh
+
+set -euo pipefail
+
+REPO_ROOT="$(git rev-parse --show-toplevel)"
+VALIDATOR="$REPO_ROOT/.agents/scripts/validate-agent-artifacts.py"
+
+if [ ! -f "$VALIDATOR" ]; then
+  # Validator not present - skip silently (system may not be set up yet)
+  exit 0
+fi
+
+# Only run if .agents/ has staged changes
+if ! git diff --cached --name-only | grep -q "^\.agents/"; then
+  exit 0
+fi
+
+echo ""
+echo "  Running agent-system artifact validation..."
+
+if python "$VALIDATOR" --root "$REPO_ROOT" > /dev/null 2>&1; then
+  echo "  OK All artifacts valid"
+  exit 0
+else
+  echo ""
+  echo "  X Agent-system artifact validation failed."
+  echo "    Run the following to see details:"
+  echo ""
+  echo "      python .agents/scripts/validate-agent-artifacts.py"
+  echo ""
+  echo "    Fix the errors above before committing."
+  echo "    To bypass (not recommended): git commit --no-verify"
+  echo ""
+  exit 1
+fi

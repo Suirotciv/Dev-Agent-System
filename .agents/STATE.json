@@ -1,0 +1,155 @@
+{
+  "_readme": "Live machine-readable snapshot for the agent team. The Orchestrator is the default sole writer. Other agents submit update envelopes in .agents/updates/ and append-only artifacts in .agents/sessions/ and .agents/gates/.",
+  "_updated": "2026-04-20",
+  "_updated_by": "prompt-hash",
+  "_state_revision": 2,
+  "_state_write_policy": "Normal path: non-orchestrator agents emit update envelopes; the Orchestrator merges them into STATE.json. Direct writes are reserved for the Orchestrator or an explicit compare-and-swap emergency path.",
+  "_merged_update_ids": [],
+  "_conflicts": [],
+  "_id_formats": {
+    "blocker": "BLOCKER-001",
+    "known_issue": "ISSUE-001",
+    "design_request": "DESIGN-REQ-001",
+    "task_node": "TASK-ROOT or TASK-001",
+    "session": "SES-YYYYMMDD-HHMMSS-role[-feature]",
+    "gate_attempt": "GATE-YYYYMMDD-HHMMSS-feature-gate",
+    "update": "UPD-YYYYMMDD-HHMMSS-role[-feature]-NN",
+    "resource_claim": "RC-YYYYMMDD-HHMMSS-feature-shortid"
+  },
+  "prompt_versions": {
+    "ORCHESTRATOR.md": "fa9c41279abc",
+    "FEATURE_AGENT.md": "502e740893ce",
+    "VERIFIER_AGENT.md": "4093962290b7",
+    "INFRA_AND_DESIGN_AGENTS.md": "b9692b13f99b",
+    "_note": "Short SHA-256 hash (first 12 hex chars) of the normalized prompt file contents. Run prompt-hash.py --write-state to refresh after editing any prompt file."
+  },
+  "project": {
+    "name": "[PROJECT NAME]",
+    "version": "0.1.0",
+    "phase": 1,
+    "status": "pre-alpha"
+  },
+  "sprint": {
+    "name": "Sprint 1.0",
+    "goal": "[One sentence sprint goal]",
+    "target_date": "YYYY-MM-DD",
+    "phase": 1
+  },
+  "task_tree": {
+    "_note": "Optional nested planning structure for multi-feature releases. Node IDs should follow _id_formats.task_node.",
+    "version": 1,
+    "nodes": []
+  },
+  "core_stability": {
+    "_note": "Tracks stability of core interfaces. IN_PROGRESS means feature agents should block. STABLE means safe to build against.",
+    "User": "STABLE",
+    "Session": "STABLE",
+    "FeatureFlags": "STABLE"
+  },
+  "features": {
+    "_note": "Each feature entry tracks lifecycle, ownership, spec status, and any local runtime bundle claimed for parallel work.",
+    "_statuses": {
+      "BUILDING": "In active development. Feature flag required if merged before ship readiness.",
+      "FUNCTIONAL": "Ready for verifier FUNCTIONAL gate.",
+      "VERIFIED": "Passed FUNCTIONAL and any required verification.",
+      "SHIP_READY": "Polished, verified, and ready for release queue.",
+      "BLOCKED": "Cannot proceed - see blockers array."
+    },
+    "_spec_statuses": {
+      "INTERVIEW_NEEDED": "Spec interview with human operator has not been run yet. Feature agent must NOT be assigned.",
+      "INTERVIEW_DONE": "Interview complete, acceptance criteria drafted, awaiting human approval.",
+      "SPEC_APPROVED": "Human operator has approved the spec. Feature agent may be assigned."
+    },
+    "[feature-name]": {
+      "status": "BUILDING | FUNCTIONAL | VERIFIED | SHIP_READY | BLOCKED",
+      "spec_status": "INTERVIEW_NEEDED | INTERVIEW_DONE | SPEC_APPROVED",
+      "flag": "FLAGS.FEATURE_NAME | null",
+      "agent": "[who is currently working on this]",
+      "started": "YYYY-MM-DD",
+      "spec": "src/features/[name]/SPEC.md",
+      "blockers": [],
+      "notes": "",
+      "runtime_port": null,
+      "test_db": null,
+      "worktree_path": null,
+      "resource_claim_id": null,
+      "compose_project_name": null,
+      "cache_namespace": null
+    }
+  },
+  "flags": {
+    "_note": "All active feature flags. Remove the entry when the flag is fully removed from code.",
+    "FLAGS.EXAMPLE": {
+      "env_var": "FEATURE_EXAMPLE",
+      "description": "What this flag enables",
+      "owner": "feature-agent | design-system-agent",
+      "status": "CREATED | IN_USE | GATE_PASSED | RELEASED | REMOVE_NOW",
+      "created": "YYYY-MM-DD",
+      "remove_after": "Sprint X.X or YYYY-MM-DD",
+      "environments": {
+        "development": false,
+        "staging": false,
+        "production": false
+      }
+    }
+  },
+  "gates": {
+    "_note": "Append-only summary index. Full evidence lives in per-attempt artifacts under .agents/gates/.",
+    "[feature-name]": [
+      {
+        "gate_attempt_id": "GATE-YYYYMMDD-HHMMSS-feature-functional",
+        "artifact": ".agents/gates/YYYY-MM-DD-HHMM-[feature]-[gate].json",
+        "gate": "FUNCTIONAL | SHIP_READY | RELEASE",
+        "date": "YYYY-MM-DD",
+        "result": "PASS | FAIL",
+        "verified_by": "[agent or human - not the agent that built it]",
+        "functional_subpasses": {
+          "static": "PASS | FAIL | SKIPPED",
+          "behavioral": "PASS | FAIL | NOT_RUN | SKIPPED"
+        },
+        "known_issue_ids": []
+      }
+    ]
+  },
+  "blockers": {
+    "_note": "Cross-agent dependencies. File here instead of editing another role's owned files.",
+    "BLOCKER-001": {
+      "requested_by": "feature-agent:[feature-name]",
+      "needed_from": "core | design-system-agent | infra-agent | orchestrator",
+      "description": "What needs to change and why",
+      "impact": "What is blocked until this resolves",
+      "status": "OPEN | IN_PROGRESS | RESOLVED",
+      "opened": "YYYY-MM-DD",
+      "resolved": null
+    }
+  },
+  "design_requests": {
+    "_note": "Lightweight non-blocking signals for shared design work. IDs should follow _id_formats.design_request.",
+    "items": []
+  },
+  "do_not_break": {
+    "_note": "Features or interfaces confirmed working. Regression against these is a hard stop.",
+    "[feature-or-interface]": "Brief description of what must stay working"
+  },
+  "known_issues": [
+    {
+      "id": "ISSUE-001",
+      "description": "[Issue description]",
+      "owner": "feature-agent:[name] | core | design-system | infra | orchestrator",
+      "priority": "HIGH | MEDIUM | LOW",
+      "opened": "YYYY-MM-DD"
+    }
+  ],
+  "stale_flags_to_remove": {
+    "_note": "Flags whose features have shipped but have not been cleaned up yet.",
+    "FLAGS.EXAMPLE": "Shipped YYYY-MM-DD. Remove the constant, env var, and conditionals."
+  },
+  "environment_flag_matrix": {
+    "_note": "Current flag state per environment. Infra owns this.",
+    "FEATURE_EXAMPLE": {
+      "development": false,
+      "staging": false,
+      "production": false
+    }
+  }
+}

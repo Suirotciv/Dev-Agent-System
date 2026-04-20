@@ -1,0 +1,52 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "Session Frontmatter",
+  "type": "object",
+  "required": [
+    "session_id",
+    "role",
+    "feature",
+    "_prompt_version",
+    "_state_revision_at_start",
+    "resource_claim_id",
+    "started_at",
+    "ended_at",
+    "legacy"
+  ],
+  "properties": {
+    "session_id": { "type": "string" },
+    "role": {
+      "type": "string",
+      "enum": [
+        "orchestrator",
+        "feature-agent",
+        "verifier-agent",
+        "infra-agent",
+        "design-system-agent"
+      ]
+    },
+    "feature": { "type": ["string", "null"] },
+    "_prompt_version": { "type": "string", "minLength": 1 },
+    "_state_revision_at_start": { "type": "integer", "minimum": 0 },
+    "resource_claim_id": { "type": ["string", "null"] },
+    "started_at": { "type": "string" },
+    "ended_at": { "type": "string" },
+    "legacy": { "type": "boolean" },
+    "context_budget_start_percent": {
+      "type": "integer",
+      "minimum": 0,
+      "maximum": 100,
+      "description": "Estimated context window used (%) at session start. Optional but recommended."
+    },
+    "context_budget_end_percent": {
+      "type": "integer",
+      "minimum": 0,
+      "maximum": 100,
+      "description": "Estimated context window used (%) at session end. Optional but recommended."
+    },
+    "compaction_performed": {
+      "type": "boolean",
+      "description": "True if the agent wrote SESSION_STATE.md and compacted during this session."
+    }
+  }
+}

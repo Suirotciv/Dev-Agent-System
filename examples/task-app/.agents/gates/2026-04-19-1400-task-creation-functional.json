@@ -1,0 +1,55 @@
+{
+  "gate_attempt_id": "GATE-20260419-140000-task-creation-functional",
+  "feature": "task-creation",
+  "gate": "functional",
+  "date": "2026-04-19",
+  "result": "PASS",
+  "verified_by": "verifier-agent",
+  "_prompt_version": "a46a3977faab",
+  "functional_subpasses": {
+    "static": "PASS",
+    "behavioral": "PASS"
+  },
+  "criteria_results": {
+    "AC-01": {
+      "status": "PASS",
+      "evidence": "Manual test: typed title, pressed Enter. Task appeared in list within ~80ms. Optimistic update confirmed via network tab - UI updated before API response."
+    },
+    "AC-02": {
+      "status": "PASS",
+      "evidence": "Verified in Chrome 124 and Firefox 125. Input received focus on page load without user interaction. `useEffect` + `inputRef.current?.focus()` pattern works correctly."
+    },
+    "AC-03": {
+      "status": "PASS",
+      "evidence": "After fix (title.trim().length === 0 guard added): entering '   ' (3 spaces) shows 'Task title cannot be empty' inline below the field. Form is not submitted. Confirmed with single space, multiple spaces, and tab character. ISSUE-001 partially resolved - client trim now correct. Server validation also confirmed as backup."
+    },
+    "AC-04": {
+      "status": "PASS",
+      "evidence": "Typed 201 characters. Character counter shows '201/200' in red. Submit button disabled. Removed one character - counter returns to black, button enabled."
+    },
+    "AC-05": {
+      "status": "PASS",
+      "evidence": "Slowed network to 'Slow 3G' in DevTools. Spinner visible on Add button, input disabled. On success: spinner disappears, input clears, task appears."
+    },
+    "AC-06": {
+      "status": "PASS",
+      "evidence": "Injected 500 response via mock. Error 'Something went wrong - please try again' shown below form. Previously entered title 'Buy milk' preserved in input field after error."
+    },
+    "AC-07": {
+      "status": "PASS",
+      "evidence": "Chrome DevTools mobile simulation at 375px. Input and Add button are full-width. Error message wraps cleanly at 375px, no overflow. Tap target size acceptable."
+    },
+    "AC-08": {
+      "status": "PASS",
+      "evidence": "Set FEATURE_TASK_CREATION=false, restarted dev server. Task creation form route returns null - no form rendered. Set back to true - form renders. Both paths confirmed."
+    }
+  },
+  "known_issue_ids": ["ISSUE-001"],
+  "failures": [],
+  "verifier_context": {
+    "spec_read": true,
+    "implementation_session_logs_read": false,
+    "feature_notes_in_state_read": false,
+    "additional_context": "Read ISSUE-001 from STATE.json known_issues to understand the whitespace trim gap before testing AC-03. This is scoped state access, not implementation context."
+  }
+}

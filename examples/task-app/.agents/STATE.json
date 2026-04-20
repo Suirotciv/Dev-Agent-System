@@ -1,0 +1,185 @@
+{
+  "_readme": "Live machine-readable snapshot for the agent team. The Orchestrator is the default sole writer. Other agents submit update envelopes in .agents/updates/ and append-only artifacts in .agents/sessions/ and .agents/gates/.",
+  "_updated": "2026-04-19",
+  "_updated_by": "orchestrator",
+  "_state_revision": 6,
+  "_state_write_policy": "Normal path: non-orchestrator agents emit update envelopes; the Orchestrator merges them into STATE.json.",
+  "_merged_update_ids": [
+    "UPD-20260418-090000-new-feature-task-creation-01",
+    "UPD-20260418-091500-new-feature-task-completion-01",
+    "UPD-20260419-103000-feature-agent-task-creation-01",
+    "UPD-20260419-140500-verifier-agent-task-creation-01"
+  ],
+  "_conflicts": [],
+  "_id_formats": {
+    "blocker": "BLOCKER-001",
+    "known_issue": "ISSUE-001",
+    "design_request": "DESIGN-REQ-001",
+    "task_node": "TASK-ROOT or TASK-001",
+    "session": "SES-YYYYMMDD-HHMMSS-role[-feature]",
+    "gate_attempt": "GATE-YYYYMMDD-HHMMSS-feature-gate",
+    "update": "UPD-YYYYMMDD-HHMMSS-role[-feature]-NN",
+    "resource_claim": "RC-YYYYMMDD-HHMMSS-feature-shortid"
+  },
+  "prompt_versions": {
+    "_note": "Short SHA-256 hash of the normalized prompt file contents.",
+    "ORCHESTRATOR.md": "a9f70eee94ae",
+    "FEATURE_AGENT.md": "ed90cdd8c6df",
+    "VERIFIER_AGENT.md": "a46a3977faab",
+    "INFRA_AND_DESIGN_AGENTS.md": "487870c5c751"
+  },
+  "project": {
+    "name": "TaskFlow",
+    "version": "0.1.0",
+    "phase": 1,
+    "status": "pre-alpha"
+  },
+  "sprint": {
+    "name": "Sprint 1.0",
+    "goal": "Ship core task creation and completion so users can manage a basic task list",
+    "target_date": "2026-04-30",
+    "phase": 1
+  },
+  "task_tree": {
+    "_note": "Optional nested planning structure.",
+    "version": 1,
+    "nodes": []
+  },
+  "core_stability": {
+    "_note": "STABLE = safe to build against. IN_PROGRESS = feature agents should block.",
+    "User": "STABLE",
+    "Session": "STABLE",
+    "FeatureFlags": "STABLE",
+    "Task": "STABLE"
+  },
+  "features": {
+    "_note": "Each feature entry tracks lifecycle, ownership, spec status, and any runtime bundle.",
+    "_statuses": {
+      "BUILDING": "In active development. Flag required if merged before ship readiness.",
+      "FUNCTIONAL": "Ready for verifier FUNCTIONAL gate.",
+      "VERIFIED": "Passed FUNCTIONAL and any required verification.",
+      "SHIP_READY": "Polished, verified, and ready for release queue.",
+      "BLOCKED": "Cannot proceed - see blockers array."
+    },
+    "_spec_statuses": {
+      "INTERVIEW_NEEDED": "Spec interview not run yet. Do not assign a feature agent.",
+      "INTERVIEW_DONE": "Interview complete, ACs drafted, awaiting human approval.",
+      "SPEC_APPROVED": "Human approved spec. Feature agent may be assigned."
+    },
+    "task-creation": {
+      "status": "VERIFIED",
+      "spec_status": "SPEC_APPROVED",
+      "flag": "FLAGS.TASK_CREATION",
+      "agent": "feature-agent:task-creation",
+      "started": "2026-04-18",
+      "spec": "src/features/task-creation/SPEC.md",
+      "blockers": [],
+      "notes": "",
+      "runtime_port": null,
+      "test_db": null,
+      "worktree_path": null,
+      "resource_claim_id": null,
+      "compose_project_name": null,
+      "cache_namespace": null
+    },
+    "task-completion": {
+      "status": "BUILDING",
+      "spec_status": "SPEC_APPROVED",
+      "flag": "FLAGS.TASK_COMPLETION",
+      "agent": "feature-agent:task-completion",
+      "started": "2026-04-19",
+      "spec": "src/features/task-completion/SPEC.md",
+      "blockers": [],
+      "notes": "",
+      "runtime_port": null,
+      "test_db": null,
+      "worktree_path": null,
+      "resource_claim_id": null,
+      "compose_project_name": null,
+      "cache_namespace": null
+    }
+  },
+  "flags": {
+    "FLAGS.TASK_CREATION": {
+      "env_var": "FEATURE_TASK_CREATION",
+      "description": "Enables the task creation form and API endpoint",
+      "owner": "feature-agent:task-creation",
+      "status": "GATE_PASSED",
+      "created": "2026-04-18",
+      "remove_after": "Sprint 1.1 - after full release",
+      "environments": {
+        "development": true,
+        "staging": true,
+        "production": false
+      }
+    },
+    "FLAGS.TASK_COMPLETION": {
+      "env_var": "FEATURE_TASK_COMPLETION",
+      "description": "Enables the task completion checkbox and status update API",
+      "owner": "feature-agent:task-completion",
+      "status": "IN_USE",
+      "created": "2026-04-19",
+      "remove_after": "Sprint 1.1 - after full release",
+      "environments": {
+        "development": true,
+        "staging": false,
+        "production": false
+      }
+    }
+  },
+  "gates": {
+    "task-creation": [
+      {
+        "gate_attempt_id": "GATE-20260419-140000-task-creation-functional",
+        "artifact": ".agents/gates/2026-04-19-1400-task-creation-functional.json",
+        "gate": "FUNCTIONAL",
+        "date": "2026-04-19",
+        "result": "PASS",
+        "verified_by": "verifier-agent",
+        "functional_subpasses": {
+          "static": "PASS",
+          "behavioral": "PASS"
+        },
+        "known_issue_ids": ["ISSUE-001"]
+      }
+    ]
+  },
+  "blockers": {},
+  "design_requests": {
+    "items": [
+      {
+        "id": "DESIGN-REQ-001",
+        "requested_by": "feature-agent:task-creation",
+        "description": "Need a --color-input-border-error token. Used closest available (--color-border-danger) temporarily.",
+        "status": "OPEN",
+        "opened": "2026-04-19"
+      }
+    ]
+  },
+  "do_not_break": {
+    "User.id": "UUID format used in all API responses - changing type breaks all consumers",
+    "GET /api/tasks": "Task list endpoint - relied on by task-creation and task-completion features"
+  },
+  "known_issues": [
+    {
+      "id": "ISSUE-001",
+      "description": "Task title field accepts empty strings when whitespace-only input is submitted. Server-side validation exists but client-side trim is missing.",
+      "owner": "feature-agent:task-creation",
+      "priority": "MEDIUM",
+      "opened": "2026-04-19"
+    }
+  ],
+  "stale_flags_to_remove": {},
+  "environment_flag_matrix": {
+    "FEATURE_TASK_CREATION": {
+      "development": true,
+      "staging": true,
+      "production": false
+    },
+    "FEATURE_TASK_COMPLETION": {
+      "development": true,
+      "staging": false,
+      "production": false
+    }
+  }
+}
