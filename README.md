@@ -5,7 +5,7 @@ A reusable **agent coordination template**: shared `.agents/STATE.json`, role pr
 ## Quick start
 
 ```bash
-git clone <your-fork-or-repo-url>
+git clone https://github.com/Suirotciv/Dev-Agent-System.git
 cd Dev-Agent-System
 
 python .agents/scripts/bootstrap.py
