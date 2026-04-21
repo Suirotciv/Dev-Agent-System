@@ -29,6 +29,8 @@ python .agents/scripts/demo-smoke.py
 
 Example project state (TaskFlow sample): [examples/task-app/](examples/task-app/).
 
+**Video / narrative demo (PixelForge):** [Dev-Agent-System-Demo/DEMO.md](Dev-Agent-System-Demo/DEMO.md) — storyboard, agent artifacts, terminal recording notes.
+
 ## Requirements
 
 - **Python 3.9+** (helpers use the standard library only)
