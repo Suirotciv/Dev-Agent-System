@@ -68,7 +68,15 @@ py .agents\scripts\spec-interview.py --feature pixel-editor
 
 It asks a short set of questions and **writes the Interview notes section** for you. You can still use an Orchestrator chat afterward to tighten acceptance criteria.
 
-**Duplicate files in `.agents\updates\`:** If you ran `new-feature.py` twice, you will see **two** JSON files. **Delete the older one**, then run **`merge-updates.py` once** with the file you kept.
+**Duplicate files in `.agents\updates\`:** If you ran `new-feature.py` twice, you will see **two** JSON files. **Delete the older one**, then merge once.
+
+**Merge without typing the long filename:**
+
+```powershell
+py .agents\scripts\merge-updates.py --expected-revision 1 --latest
+```
+
+Use the current `_state_revision` from `STATE.json` if it is not `1`.
 
 ---
 

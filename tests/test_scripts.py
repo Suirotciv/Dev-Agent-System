@@ -108,6 +108,35 @@ class ScriptWorkflowTests(unittest.TestCase):
             )
             run_script([PYTHON, ".agents/scripts/validate-agent-artifacts.py"], cwd=project)
 
+    def test_merge_latest_flag(self) -> None:
+        temp, project = self.make_project()
+        with temp:
+            run_script(
+                [
+                    PYTHON,
+                    ".agents/scripts/new-feature.py",
+                    "--name",
+                    "alpha",
+                    "--issue",
+                    "1",
+                    "--quiet",
+                ],
+                cwd=project,
+            )
+            run_script(
+                [
+                    PYTHON,
+                    ".agents/scripts/merge-updates.py",
+                    "--expected-revision",
+                    "1",
+                    "--latest",
+                ],
+                cwd=project,
+            )
+            state = json.loads((project / ".agents" / "STATE.json").read_text(encoding="utf-8"))
+            self.assertEqual(state["_state_revision"], 2)
+            self.assertIn("alpha", state["features"])
+
     def test_merge_rejects_invalid_status(self) -> None:
         temp, project = self.make_project()
         with temp:

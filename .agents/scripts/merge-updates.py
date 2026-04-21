@@ -8,6 +8,7 @@ Detects and logs path conflicts when multiple envelopes touch the same key.
 
 Usage:
     python .agents/scripts/merge-updates.py --expected-revision <n> [envelopes...]
+    python .agents/scripts/merge-updates.py --expected-revision <n> --latest
     python .agents/scripts/merge-updates.py --expected-revision <n> --dry-run [envelopes...]
 """
 
@@ -23,8 +24,11 @@ from agent_helpers import (
     AgentSystemError,
     apply_change,
     is_hex12,
+    list_artifact_files,
     load_json,
     read_state,
+    repo_root,
+    resolve_path,
     write_state,
 )
 
@@ -344,16 +348,45 @@ def main() -> int:
         action="store_true",
         help="Suppress warnings (errors still shown)",
     )
-    parser.add_argument("updates", nargs="+", help="One or more update envelope paths")
+    parser.add_argument(
+        "--latest",
+        action="store_true",
+        help="Merge the newest envelope in .agents/updates/ (by filename). For solo use when only one pending file.",
+    )
+    parser.add_argument(
+        "updates",
+        nargs="*",
+        default=[],
+        help="One or more update envelope paths (omit if --latest)",
+    )
     args = parser.parse_args()
     verbose = not args.quiet
+
+    if args.latest and args.updates:
+        parser.error("use either --latest or explicit paths, not both")
+    if not args.latest and not args.updates:
+        parser.error("pass envelope path(s) or --latest")
 
     try:
         state = read_state(args.state)
 
+        if args.latest:
+            state_path = resolve_path(args.state, repo_root() / ".agents" / "STATE.json")
+            updates_dir = state_path.parent / "updates"
+            files = list_artifact_files(updates_dir, ".json")
+            if not files:
+                raise AgentSystemError(
+                    f"no update envelopes in {updates_dir}. Run new-feature.py first."
+                )
+            raw_paths = [str(files[-1])]
+            if verbose:
+                print(f"  using latest envelope: {files[-1].name}", file=sys.stderr)
+        else:
+            raw_paths = args.updates
+
         # Load and validate all envelopes before applying any
         loaded: list[tuple[Path, dict[str, Any]]] = []
-        for raw_path in args.updates:
+        for raw_path in raw_paths:
             path = Path(raw_path)
             envelope = load_json(path)
             validate_envelope_structure(envelope, path)
