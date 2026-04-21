@@ -1,0 +1,40 @@
+{
+  "update_id": "UPD-20260420-144500-verifier-pixel-editor-01",
+  "submitted_at": "2026-04-20T14:45:00-06:00",
+  "submitted_by": "verifier-agent:pixel-editor",
+  "role": "verifier-agent",
+  "_prompt_version": "4093962290b7",
+  "_state_revision_at_start": 3,
+  "target_feature": "pixel-editor",
+  "resource_claim_id": null,
+  "summary": "pixel-editor passed FUNCTIONAL gate after AC-06 export fix. Advancing status to VERIFIED. ISSUE-001 filed for export test coverage gap. Gate artifact written.",
+  "changes": [
+    {
+      "op": "set",
+      "path": "features.pixel-editor.status",
+      "value": "VERIFIED"
+    },
+    {
+      "op": "append",
+      "path": "gates.pixel-editor",
+      "value": {
+        "gate_attempt_id": "GATE-20260420-140000-pixel-editor-functional",
+        "artifact": ".agents/gates/2026-04-20-1400-pixel-editor-functional.json",
+        "gate": "FUNCTIONAL",
+        "date": "2026-04-20",
+        "result": "PASS",
+        "verified_by": "verifier-agent",
+        "functional_subpasses": {
+          "static": "PASS",
+          "behavioral": "PASS"
+        },
+        "known_issue_ids": ["ISSUE-001"]
+      }
+    },
+    {
+      "op": "set",
+      "path": "do_not_break.pixel-editor-export",
+      "value": "PNG export at 512x512 — confirmed working as of 2026-04-20 FUNCTIONAL gate"
+    }
+  ]
+}

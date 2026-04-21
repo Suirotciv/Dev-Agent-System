@@ -1,0 +1,5 @@
+# Generated terminal recordings (reproduce with vhs/asciinema)
+*.gif
+*.mp4
+*.webm
+*.cast

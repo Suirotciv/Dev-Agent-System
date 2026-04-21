@@ -1,0 +1,111 @@
+{
+  "_readme": "Live machine-readable snapshot for the PixelForge agent team.",
+  "_updated": "2026-04-20",
+  "_updated_by": "orchestrator",
+  "_state_revision": 5,
+  "_state_write_policy": "Normal path: non-orchestrator agents emit update envelopes; the Orchestrator merges them into STATE.json.",
+  "_merged_update_ids": [
+    "UPD-20260420-090000-new-feature-pixel-editor-01",
+    "UPD-20260420-135800-feature-agent-pixel-editor-01",
+    "UPD-20260420-144500-verifier-pixel-editor-01"
+  ],
+  "_conflicts": [],
+  "prompt_versions": {
+    "_note": "Short SHA-256 hash of the normalized prompt file contents.",
+    "ORCHESTRATOR.md": "fa9c41279abc",
+    "FEATURE_AGENT.md": "502e740893ce",
+    "VERIFIER_AGENT.md": "4093962290b7",
+    "INFRA_AND_DESIGN_AGENTS.md": "b9692b13f99b"
+  },
+  "project": {
+    "name": "PixelForge",
+    "version": "0.1.0",
+    "phase": 1,
+    "status": "pre-alpha"
+  },
+  "sprint": {
+    "name": "Sprint 1.0",
+    "goal": "Ship a working 16x16 pixel art editor with export",
+    "target_date": "2026-04-25",
+    "phase": 1
+  },
+  "task_tree": { "version": 1, "nodes": [] },
+  "core_stability": {
+    "User": "STABLE",
+    "Session": "STABLE",
+    "FeatureFlags": "STABLE"
+  },
+  "features": {
+    "_note": "Each feature entry tracks lifecycle, ownership, spec status, and runtime bundle.",
+    "pixel-editor": {
+      "status": "VERIFIED",
+      "spec_status": "SPEC_APPROVED",
+      "flag": "FLAGS.PIXEL_EDITOR",
+      "agent": "feature-agent:pixel-editor",
+      "started": "2026-04-20",
+      "spec": "src/features/pixel-editor/SPEC.md",
+      "blockers": [],
+      "notes": "",
+      "runtime_port": null,
+      "test_db": null,
+      "worktree_path": null,
+      "resource_claim_id": null,
+      "compose_project_name": null,
+      "cache_namespace": null
+    }
+  },
+  "flags": {
+    "FLAGS.PIXEL_EDITOR": {
+      "env_var": "FEATURE_PIXEL_EDITOR",
+      "description": "Enables the pixel art editor feature",
+      "owner": "feature-agent:pixel-editor",
+      "status": "GATE_PASSED",
+      "created": "2026-04-20",
+      "remove_after": "Sprint 1.1 — after full release",
+      "environments": {
+        "development": true,
+        "staging": true,
+        "production": false
+      }
+    }
+  },
+  "gates": {
+    "pixel-editor": [
+      {
+        "gate_attempt_id": "GATE-20260420-140000-pixel-editor-functional",
+        "artifact": ".agents/gates/2026-04-20-1400-pixel-editor-functional.json",
+        "gate": "FUNCTIONAL",
+        "date": "2026-04-20",
+        "result": "PASS",
+        "verified_by": "verifier-agent",
+        "functional_subpasses": {
+          "static": "PASS",
+          "behavioral": "PASS"
+        },
+        "known_issue_ids": ["ISSUE-001"]
+      }
+    ]
+  },
+  "blockers": {},
+  "design_requests": { "items": [] },
+  "do_not_break": {
+    "pixel-editor-export": "PNG export at 512x512 — confirmed working as of 2026-04-20 FUNCTIONAL gate"
+  },
+  "known_issues": [
+    {
+      "id": "ISSUE-001",
+      "description": "Export canvas initially used scale=1 (16x16px output) instead of scale=32 (512x512px). Fixed before gate passed. Retained as a known pattern for future test coverage.",
+      "owner": "feature-agent:pixel-editor",
+      "priority": "LOW",
+      "opened": "2026-04-20"
+    }
+  ],
+  "stale_flags_to_remove": {},
+  "environment_flag_matrix": {
+    "FEATURE_PIXEL_EDITOR": {
+      "development": true,
+      "staging": true,
+      "production": false
+    }
+  }
+}

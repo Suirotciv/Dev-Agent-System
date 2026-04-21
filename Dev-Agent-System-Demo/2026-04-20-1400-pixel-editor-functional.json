@@ -1,0 +1,55 @@
+{
+  "gate_attempt_id": "GATE-20260420-140000-pixel-editor-functional",
+  "feature": "pixel-editor",
+  "gate": "functional",
+  "date": "2026-04-20",
+  "result": "PASS",
+  "verified_by": "verifier-agent",
+  "_prompt_version": "4093962290b7",
+  "functional_subpasses": {
+    "static": "PASS",
+    "behavioral": "PASS"
+  },
+  "criteria_results": {
+    "AC-01": {
+      "status": "PASS",
+      "evidence": "Clicked and dragged across 6 cells in one motion — all 6 painted, no gaps. Fast drag tested: no missed cells at normal interaction speed."
+    },
+    "AC-02": {
+      "status": "PASS",
+      "evidence": "Painted a row of 5 cells, switched to eraser, dragged across 3 — those 3 set to null (checkerboard visible). Remaining 2 unchanged."
+    },
+    "AC-03": {
+      "status": "PASS",
+      "evidence": "Painted a 5×5 enclosed region, filled interior. 9 interior cells filled, border cells unchanged. Fill-on-same-color: no change. Cross-boundary: fill stopped at differently-colored cell. 4-directional confirmed by diagonal non-connectivity test."
+    },
+    "AC-04": {
+      "status": "PASS",
+      "evidence": "Clicked #ff4757 pixel. Active color changed to #ff4757. Tool switched to pen. Immediately drew with new color — confirmed by visual match."
+    },
+    "AC-05": {
+      "status": "PASS",
+      "evidence": "Drew 3 strokes. Ctrl+Z ×3 = empty canvas. Ctrl+Y ×3 = all 3 restored in correct order. Drag stroke counted as 1 undo step (not per-cell) — confirmed."
+    },
+    "AC-06": {
+      "status": "PASS",
+      "evidence": "After fix (scale=32): exported PNG opened in Preview.app. Dimensions: 512×512px. Pixels sharp — no blur or antialiasing. Transparent cells show as transparent in PNG. File size ~3KB for sparse canvas."
+    },
+    "AC-07": {
+      "status": "PASS",
+      "evidence": "Both 1× (16×16px display) and 4× (64×64px display) previews updated immediately on every cell paint. Checkerboard visible for transparent cells in both previews."
+    },
+    "AC-08": {
+      "status": "PASS",
+      "evidence": "Set FEATURE_PIXEL_EDITOR=false. Page rendered blank — no canvas, no toolbar, no palette. Reset to true: full editor rendered."
+    }
+  },
+  "known_issue_ids": ["ISSUE-001"],
+  "failures": [],
+  "verifier_context": {
+    "spec_read": true,
+    "implementation_session_logs_read": false,
+    "feature_notes_in_state_read": false,
+    "additional_context": "Read ISSUE-001 from STATE.json known_issues before testing AC-06. This is scoped state access as permitted. The issue flagged the export scale bug, which I found independently and then confirmed was the same root cause."
+  }
+}
