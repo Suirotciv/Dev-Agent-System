@@ -58,6 +58,20 @@ That is the whole loop: **folder choice → terminal scripts → three kinds of 
 
 ---
 
+## Easier than editing SPEC.md by hand (terminal “form”)
+
+If you do not want a blank `SPEC.md`, run this **from your project root** (e.g. `Pixel_App`):
+
+```powershell
+py .agents\scripts\spec-interview.py --feature pixel-editor
+```
+
+It asks a short set of questions and **writes the Interview notes section** for you. You can still use an Orchestrator chat afterward to tighten acceptance criteria.
+
+**Duplicate files in `.agents\updates\`:** If you ran `new-feature.py` twice, you will see **two** JSON files. **Delete the older one**, then run **`merge-updates.py` once** with the file you kept.
+
+---
+
 ## How a “role” maps to Cursor
 
 | Role | What you do in Cursor |

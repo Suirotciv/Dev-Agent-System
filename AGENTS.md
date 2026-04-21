@@ -22,6 +22,9 @@ python .agents/scripts/new-project.py --name "My Project" --description "What it
 # Scaffold a feature in a project that uses this template
 python .agents/scripts/new-feature.py --name feature-name --issue 1
 
+# Fill SPEC.md Interview notes via terminal prompts (no AI required)
+python .agents/scripts/spec-interview.py --feature feature-name
+
 # Run the beginner smoke demo
 python .agents/scripts/demo-smoke.py
 

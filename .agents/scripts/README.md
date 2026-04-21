@@ -12,6 +12,7 @@ These scripts keep the agent system lightweight and operational.
 - `merge-updates.py` - merge update envelopes into `STATE.json`.
 - `validate-agent-artifacts.py` - validate state and append-only artifacts.
 - `demo-smoke.py` - run a disposable beginner workflow demo.
+- `spec-interview.py` - interactive prompts that write Interview notes into `SPEC.md`.
 
 ## Typical Usage
 

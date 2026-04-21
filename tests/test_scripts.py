@@ -5,11 +5,21 @@ import subprocess
 import sys
 import tempfile
 import unittest
+import importlib.util
 from pathlib import Path
 
 ROOT = Path(__file__).resolve().parents[1]
 SCRIPTS = ROOT / ".agents" / "scripts"
 PYTHON = sys.executable
+
+
+def load_spec_interview_module():
+    path = ROOT / ".agents" / "scripts" / "spec-interview.py"
+    spec = importlib.util.spec_from_file_location("spec_interview_mod", path)
+    assert spec is not None and spec.loader is not None
+    module = importlib.util.module_from_spec(spec)
+    spec.loader.exec_module(module)
+    return module
 
 
 def run_script(
@@ -275,6 +285,20 @@ class ScriptWorkflowTests(unittest.TestCase):
             run_script([PYTHON, ".agents/scripts/validate-agent-artifacts.py"], cwd=project, expect=1)
 
 
+class SpecInterviewTests(unittest.TestCase):
+    def test_replace_interview_section(self) -> None:
+        mod = load_spec_interview_module()
+        src = (
+            "# X\n\n## Interview notes\n\n(old)\n\n---\n\n"
+            "## User Story\n\nAs a user,\n"
+        )
+        out = mod.replace_interview_section(src, "NEW BODY")
+        self.assertIn("NEW BODY", out)
+        self.assertNotIn("(old)", out)
+        self.assertIn("## User Story", out)
+        self.assertIn("As a user,", out)
+
+
 class AcceptanceCommandTests(unittest.TestCase):
     def test_help_commands_exit_zero(self) -> None:
         commands = [
@@ -283,6 +307,7 @@ class AcceptanceCommandTests(unittest.TestCase):
             [PYTHON, ".agents/scripts/new-feature.py", "--help"],
             [PYTHON, ".agents/scripts/merge-updates.py", "--help"],
             [PYTHON, ".agents/scripts/allocate-runtime.py", "--help"],
+            [PYTHON, ".agents/scripts/spec-interview.py", "--help"],
         ]
         for command in commands:
             with self.subTest(command=command):
