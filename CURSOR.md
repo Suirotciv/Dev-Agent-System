@@ -10,6 +10,54 @@ Cursor is just the IDE where you chat, edit, and run commands. The model is what
 
 ---
 
+## Do I open a new window with only the demo folder?
+
+**No — not for real work.** `Dev-Agent-System-Demo/` is a **sample story** (markdown + JSON). There is no app to run inside that folder alone; it is for reading, recording, or showing “what the paper trail looks like.”
+
+**Do this instead:**
+
+| Goal | What to open in Cursor |
+|------|-------------------------|
+| **Learn the system + run scripts** | Open the **whole repo** `Dev-Agent-System` (template root). You get `.agents/scripts/`, prompts, and you can read `Dev-Agent-System-Demo/` next to it. One window is fine. |
+| **Build your actual product** | Open the **project folder you created** with `bootstrap.py` / `new-project.py` (e.g. `PixelForge`). That folder has **your** `src/`, **your** `.agents/STATE.json`, and is where chats should edit code. |
+| **Only skim the PixelForge narrative** | You *can* open just `Dev-Agent-System-Demo` to read files — but you cannot “run the agent system” from only that folder. |
+
+You do **not** need a separate Cursor window per role. You **do** need **separate chats** (see below) so Orchestrator / Feature / Verifier do not share one long thread.
+
+---
+
+## What you actually do inside Cursor (concrete)
+
+1. **File → Open Folder** → pick the template root *or* your generated app root (see table above).
+
+2. **Terminal** (`` Ctrl+` `` or View → Terminal) → run Python commands from that folder, e.g.  
+   `python .agents/scripts/new-feature.py --name my-feature --issue 1`
+
+3. **Orchestrator pass**  
+   - Open **Chat** (or Composer).  
+   - Use **@** to attach `.agents/ORCHESTRATOR.md` and `.agents/STATE.json`.  
+   - Say something like: “Follow the START OF SESSION PROTOCOL in ORCHESTRATOR.md. Here is the repo. Pending envelopes are in `.agents/updates/`.”  
+   - You type answers when it runs the **spec interview**; it (or you) updates `SPEC.md` and `STATE` per the template.
+
+4. **Feature pass**  
+   - **New chat** (fresh context).  
+   - Attach `.agents/FEATURE_AGENT.md` and `src/features/<name>/SPEC.md` (and `AGENTS.md` if present).  
+   - Say: “Implement this feature per SPEC; when done, write the session log and update envelope paths the prompt describes.”  
+   - Use **Composer** or **Agent** mode if you want it to touch many files under `src/`.
+
+5. **Verifier pass**  
+   - **New chat** again.  
+   - Attach `.agents/VERIFIER_AGENT.md` and the same `SPEC.md` + the **code / app** to verify.  
+   - Do **not** attach the feature agent’s session log (independence).  
+   - Ask it to produce gate JSON + envelope per `VERIFIER_AGENT.md`.
+
+6. **You** merge envelopes / bump `STATE` with the scripts, then run  
+   `python .agents/scripts/validate-agent-artifacts.py`
+
+That is the whole loop: **folder choice → terminal scripts → three kinds of chats with @ files → validate.**
+
+---
+
 ## How a “role” maps to Cursor
 
 | Role | What you do in Cursor |
