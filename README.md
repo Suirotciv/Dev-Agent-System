@@ -26,6 +26,7 @@ python .agents/scripts/demo-smoke.py
 | [QUICK_REFERENCE.md](QUICK_REFERENCE.md) | Roles, flow, defaults |
 | [MODELS.md](MODELS.md) | Model / context requirements |
 | [PROJECT_CONTEXT.md](PROJECT_CONTEXT.md) | Template identity and decisions |
+| [CURSOR.md](CURSOR.md) | Using this template in Cursor (models, chats, roles) |
 
 Example project state (TaskFlow sample): [examples/task-app/](examples/task-app/).
 
